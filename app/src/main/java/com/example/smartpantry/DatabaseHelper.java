@@ -3,7 +3,11 @@ package com.example.smartpantry;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.content.ContentValues;
+import android.database.Cursor;
+import com.example.smartpantry.model.PantryItem;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -65,5 +69,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PANTRY);
         onCreate(db);
+    }
+    //  Pantry CRUD
+    public long addPantryItem(String name, double qty, String unit, String expiry) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_P_NAME, name);
+        cv.put(COL_P_QTY, qty);
+        cv.put(COL_P_UNIT, unit);
+        cv.put(COL_P_EXPIRY, expiry);
+        return db.insert(TABLE_PANTRY, null, cv);
+    }
+
+    public void updatePantryItem(long id, String name, double qty, String unit, String expiry) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_P_NAME, name);
+        cv.put(COL_P_QTY, qty);
+        cv.put(COL_P_UNIT, unit);
+        cv.put(COL_P_EXPIRY, expiry);
+        db.update(TABLE_PANTRY, cv, COL_P_ID + "=?", new String[]{String.valueOf(id)});
+    }
+
+    public void deletePantryItem(long id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_PANTRY, COL_P_ID + "=?", new String[]{String.valueOf(id)});
+    }
+
+    public PantryItem getPantryItem(long id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.query(TABLE_PANTRY, null, COL_P_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null);
+        PantryItem item = null;
+        if (c.moveToFirst()) {
+            item = cursorToPantryItem(c);
+        }
+        c.close();
+        return item;
+    }
+
+    public List<PantryItem> getAllPantryItems() {
+        List<PantryItem> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.query(TABLE_PANTRY, null, null, null, null, null, COL_P_NAME + " ASC");
+        while (c.moveToNext()) {
+            list.add(cursorToPantryItem(c));
+        }
+        c.close();
+        return list;
+    }
+
+    private PantryItem cursorToPantryItem(Cursor c) {
+        return new PantryItem(
+                c.getLong(c.getColumnIndexOrThrow(COL_P_ID)),
+                c.getString(c.getColumnIndexOrThrow(COL_P_NAME)),
+                c.getDouble(c.getColumnIndexOrThrow(COL_P_QTY)),
+                c.getString(c.getColumnIndexOrThrow(COL_P_UNIT)),
+                c.getString(c.getColumnIndexOrThrow(COL_P_EXPIRY))
+        );
     }
 }
