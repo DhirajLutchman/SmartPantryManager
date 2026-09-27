@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,13 +35,17 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
 
         Button addButton = findViewById(R.id.btnAddItem);
         addButton.setOnClickListener(v -> {
-            // Temporary: adds a quick test item so we can confirm the database + list work.
-            // This gets replaced with a real Add/Edit screen in the next stage.
-            dbHelper.addPantryItem("Test Item", 1, "pcs", "");
-            Toast.makeText(this, "Test item added", Toast.LENGTH_SHORT).show();
-            loadPantryItems();
+            Intent intent = new Intent(MainActivity.this, AddEditIngredientActivity.class);
+            startActivity(intent);
         });
 
+        loadPantryItems();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh every time we come back to this screen (e.g. after adding/editing an item)
         loadPantryItems();
     }
 
@@ -58,8 +61,9 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
 
     @Override
     public void onEdit(PantryItem item) {
-        // Wired up properly once the Add/Edit screen exists in the next stage.
-        Toast.makeText(this, "Edit screen coming in the next stage", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AddEditIngredientActivity.class);
+        intent.putExtra("item_id", item.getId());
+        startActivity(intent);
     }
 
     @Override
