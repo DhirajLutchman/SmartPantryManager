@@ -47,6 +47,17 @@
             android:text="+ Add"
             android:textColor="#FFFFFF" />
 
+        <Button
+            android:id="@+id/btnSuggestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="16dp"
+            android:backgroundTint="#C62828"
+            android:text="Suggestions"
+            android:textColor="#FFFFFF" />
+
     </RelativeLayout>
 
 </LinearLayout>

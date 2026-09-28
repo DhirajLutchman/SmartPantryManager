@@ -38,7 +38,11 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
             Intent intent = new Intent(MainActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
-
+        Button suggestionsButton = findViewById(R.id.btnSuggestions);
+        suggestionsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SuggestedRecipesActivity.class);
+            startActivity(intent);
+        });
         loadPantryItems();
     }
 
