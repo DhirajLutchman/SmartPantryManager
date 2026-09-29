@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartpantry.adapter.PantryAdapter;
 import com.example.smartpantry.model.PantryItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
     private DatabaseHelper dbHelper;
     private RecyclerView recyclerView;
     private TextView emptyText;
+    private BottomNavigationView bottomNav;
     private List<PantryItem> pantryItems;
 
     @Override
@@ -38,18 +40,28 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
             Intent intent = new Intent(MainActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
-        Button suggestionsButton = findViewById(R.id.btnSuggestions);
-        suggestionsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SuggestedRecipesActivity.class);
-            startActivity(intent);
+
+        bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_pantry);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_suggestions) {
+                startActivity(new Intent(MainActivity.this, SuggestedRecipesActivity.class));
+            } else if (id == R.id.nav_settings) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+            // nav_pantry: already on this screen, nothing to do
+            return true;
         });
+
         loadPantryItems();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh every time we come back to this screen (e.g. after adding/editing an item)
+        // Refresh the list, and reset the highlighted tab to Pantry when we come back
+        bottomNav.setSelectedItemId(R.id.nav_pantry);
         loadPantryItems();
     }
 

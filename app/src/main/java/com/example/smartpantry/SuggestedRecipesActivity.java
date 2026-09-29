@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartpantry.adapter.RecipeAdapter;
 import com.example.smartpantry.model.Recipe;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -33,7 +34,18 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
         recyclerView = findViewById(R.id.recyclerSuggestions);
         emptyText = findViewById(R.id.textNoMatches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_suggestions);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_pantry) {
+                finish(); // go back to the Pantry screen underneath
+            } else if (id == R.id.nav_settings) {
+                startActivity(new Intent(SuggestedRecipesActivity.this, SettingsActivity.class));
+                finish(); // replace this screen so the back stack stays short
+            }
+            return true;
+        });
         loadSuggestions();
     }
 
