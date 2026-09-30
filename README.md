@@ -9,7 +9,7 @@ enough quantity — that's the "strict matching" rule the whole project is built
 
 ## The idea
 
-I built this because I kept buying groceries, using half of them, and then not 
+I built this because users keep buying groceries, using half of them, and then not 
 knowing what to do with the rest before they went off. This app tracks what you 
 actually have at home and only shows you recipes you can cook right now, so there's 
 no back-and-forth checking whether you're missing one ingredient.
