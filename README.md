@@ -28,21 +28,21 @@ no back-and-forth checking whether you're missing one ingredient.
 
 ## Why SQLite
 
-I went with SQLite (via `SQLiteOpenHelper`, no Room) instead of Firebase or 
+I went with SQLite (via 'SQLiteOpenHelper', no Room) instead of Firebase or 
 PostgreSQL because this app doesn't need any cloud sync — it's meant to work fully 
 offline on one device. It also matched what we covered in the persistent data 
 section of the module, so I could actually explain the raw SQL rather than relying 
 on an abstraction I didn't fully understand yet.
 
 Three tables:
-- `pantry_items` — what the user currently has
-- `recipes` — recipe name + method
-- `recipe_ingredients` — each recipe's required ingredients, linked back via `recipe_id`
+- 'pantry_items' — what the user currently has
+- 'recipes' — recipe name + method
+- 'recipe_ingredients' — each recipe's required ingredients, linked back via 'recipe_id'
 
 ## The strict-matching logic
 
-This is the core of the app (see `DatabaseHelper.getStrictlySuggestedRecipes()` and 
-`util/IngredientMatcher.java`). A naive exact-string match would break on something 
+This is the core of the app (see 'DatabaseHelper.getStrictlySuggestedRecipes()' and 
+'util/IngredientMatcher.java'). A naive exact-string match would break on something 
 as simple as "tomato" vs "tomatoes", so ingredient names get normalised (lower-cased, 
 trimmed, simple plural stripped) before comparing. Quantities also get converted to 
 a common unit where possible (grams for weight, millilitres for volume), so, for 
